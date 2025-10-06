@@ -1,0 +1,40 @@
+@import url('https://fonts.cdnfonts.com/css/kanit');
+
+:root{
+  --font-base: 'Kanit', 'Noto Sans Thai', 'Sarabun', Tahoma, sans-serif;
+  --fw-base: 300;
+}
+
+html, body{
+  font-family: var(--font-base) !important;
+  font-weight: var(--fw-base) !important;
+  color:#222;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variation-settings: "wght" 300;
+}
+
+h1, h2, h3, h4, h5, h6,
+p, span:not(.fa):not([class*="fa-"]),
+a:not(.fa):not([class*="fa-"]),
+label, small, strong, b,
+li, dt, dd,
+table, th, td,
+code, pre,
+input, select, textarea, button,
+.badge, .btn, .dropdown-item, .breadcrumb-item {
+  font-family: var(--font-base) !important;
+  font-weight: var(--fw-base) !important;
+}
+
+/* card-shadow */
+.custom-shadow {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.custom-shadow:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
+}

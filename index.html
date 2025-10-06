@@ -1,11 +1,644 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>prayertraining</title>
-</head>
-<body>
-    hi prayertraining !
-</body>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>ลงทะเบียน</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+
+    <!-- Bootstrap & BootstrapVue CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-vue/2.23.1/bootstrap-vue.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-vue/2.23.1/bootstrap-vue-icons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/vue-select@3.20.2/dist/vue-select.css"
+    />
+
+    <style>
+      html,
+      body {
+        /* scrollbar-gutter: stable; */
+        background: #202B5D;
+      }
+      #vs1__combobox {
+        border-radius: 5px !important;
+        height: calc(1.5em + 0.75rem + 2px);
+      }
+      .v-select {
+        width: 100%;
+      }
+      .v-select .dropdown-toggle {
+        height: calc(2.25rem + 2px);
+      }
+      legend {
+        font-weight: 500 !important;
+        font-size: 1.2rem !important;
+        color: #311b92 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Landing page before registration -->
+      <!-- TEST: {{ isCookied }} {{ keyUpdate}} -->
+      <template v-if="!register">
+        <b-container
+          fluid
+          class="d-flex flex-column align-items-center min-vh-100"
+          :key="keyUpdate"
+        >
+          <!-- Wrapper to center all contents and restrict max width -->
+          <div class="mt-4 text-center w-100 mx-auto" style="max-width: 420px">
+            <template v-if="!isCookied">
+            <h1 style="font-weight: 500 !important; color: #E5B837">
+              {{ title }}
+            </h1>
+            <h4 class="mb-4" style="color: #F8F38A">{{ subtitle }}</h4>
+            </template>
+            <template v-else>
+            <h1 style="font-weight: 500 !important; color: #311b92">
+              ลงทะเบียนเรียบร้อย
+            </h1>
+            </template>
+            <b-row v-if="isCookied===true" class="mb-2">
+              <b-col>
+                <div class="zoom-actions d-flex align-items-center">
+                  <b-button
+                    variant="primary"
+                    class="mr-2"
+                    @click="openZoomDeep"
+                    style="padding: 10px 16px; border-radius: 10px; min-width: 140px;"
+                  >
+                    <i class="fas fa-video mr-2"></i> ลิงค์เข้าห้อง ZOOM
+                  </b-button>
+
+                  <b-button
+                    v-if="false"
+                    variant="outline-secondary"
+                    class="mr-2"
+                    @click="copyZoom"
+                    style="border-radius: 10px"
+                  >
+                    <i class="fas fa-copy mr-1"></i> คัดลอกลิงก์
+                  </b-button>
+
+                  <b-button
+                    variant="outline-primary"
+                    @click="$bvModal.show('zoom-qr-modal')"
+                    style="padding: 10px 16px; border-radius: 10px; min-width: 140px;"
+                  >
+                    <i class="fas fa-qrcode mr-1"></i> Scan QR เข้า ZOOM
+                  </b-button>
+                </div>
+
+                <!-- Modal แสดง QR -->
+                <b-modal
+                  id="zoom-qr-modal"
+                  title="สแกนเพื่อเข้าห้อง Zoom"
+                  hide-footer
+                >
+                  <div class="text-center">
+                    <img
+                      :src="zoomQrUrl"
+                      alt="Zoom QR"
+                      style="max-width: 260px; width: 100%; height: auto"
+                    />
+                    <p class="mt-3 mb-0 small text-muted">
+                      สแกน QR เพื่อเปิดลิงก์ Zoom
+                    </p>
+                    <p class="small text-muted">
+                      ลิงก์:
+                      <a :href="zoomWebLink" target="_blank" rel="noopener"
+                        >{{ shortLink }}</a
+                      >
+                    </p>
+                  </div>
+                  <div class="text-muted">
+                    คำแนะนำสำหรับ IOS: <br/>
+                    Meeting ID: 819 1588 6102 <br/>
+                    Passcode: 205390 <br/>
+                  </div>
+                </b-modal>
+              </b-col>
+            </b-row>
+
+            <b-row v-if="isCookied===true">
+              <b-col cols="12" class="mb-2">
+                <a
+                  class="mb-4"
+                  href="https://line.me/ti/p/%40everyoneth"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <button
+                    style="
+                      padding: 10px 16px;
+                      border-radius: 10px;
+                      background: #00c300;
+                      color: white;
+                      border: none;
+                    "
+                  >
+                    <i class="fab fa-line"></i> กรุณาเพิ่ม @everyoneth
+                  </button>
+                </a>
+              </b-col>
+            </b-row>
+            <!-- Responsive image with shadow -->
+            <b-row>
+              <b-col cols="12" class="mb-2">
+                <!-- Responsive image with shadow -->
+                <b-img
+                  src="pic-1.png"
+                  fluid
+                  alt="BENJI MORF"
+                  class="custom-shadow"
+                />
+              </b-col>
+              <b-col class="">
+                <!-- Register button (responsive & max 400px) -->
+                <b-button
+                  v-if="!isCookied"
+                  variant="info"
+                  class="custom-shadow w-100"
+                  @click="register = true"
+                  style="
+                    max-width: 400px;
+                    height: 40px;
+                    border-radius: 10px;
+                    font-weight: 500 !important;
+                    font-size: 1.2rem !important;
+                  "
+                >
+                  <i class="fas fa-heartbeat"></i> สนใจเข้าร่วม
+                </b-button>
+              </b-col>
+            </b-row>
+          </div>
+        </b-container>
+      </template>
+
+      <!-- Registration form -->
+      <template v-else>
+        <b-container
+          fluid
+          class="d-flex flex-column align-items-center min-vh-100"
+        >
+          <b-row class="register-input w-100" style="max-width: 420px">
+            <!-- Title and back action -->
+            <b-col
+              cols="12"
+              class="text-center mb-0"
+              @click="register = false"
+              style="cursor: pointer"
+            >
+              <h3
+                style="
+                  font-weight: 500 !important;
+                  color: #311b92;
+                  position: relative;
+                  bottom: -5px;
+                "
+              >
+                ลงทะเบียน<br />
+                {{ registerTitle }}
+              </h3>
+              <span class="text-muted">รายละเอียด</span>
+            </b-col>
+
+            <!-- Form fields -->
+            <b-col cols="12" class="text-center mb-4" style="padding: 0px">
+              <div class="register-form">
+                <!-- Phone number -->
+                <b-form-group label="เบอร์โทรศัพท์" label-class="text-left">
+                  <b-form-input
+                    v-model="form.number_id"
+                    type="text"
+                    maxlength="10"
+                    @input="form.number_id = form.number_id.replace(/\D/g, '').slice(0, 10)"
+                    placeholder="เบอร์โทรศัพท์ (เช่น 0812345678)"
+                    autofocus
+                    required
+                  ></b-form-input>
+                </b-form-group>
+
+                <!-- Province select -->
+                <b-form-group label="จังหวัด" label-class="text-left">
+                  <v-select
+                    v-model="form.province"
+                    :options="provinceOptions"
+                    placeholder="เลือกจังหวัด"
+                  ></v-select>
+                </b-form-group>
+
+                <!-- First name -->
+                <b-form-group label="ชื่อ" label-class="text-left">
+                  <b-form-input
+                    v-model="form.first_name"
+                    type="text"
+                    placeholder="ชื่อ"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+
+                <!-- Last name -->
+                <b-form-group
+                  label="นามสกุล"
+                  class="mb-2"
+                  label-class="text-left"
+                >
+                  <b-form-input
+                    v-model="form.last_name"
+                    type="text"
+                    placeholder="นามสกุล"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+
+                <!-- Class (read-only) -->
+                <b-form-group
+                  v-if="false"
+                  class="mb-2"
+                  label="เข้าร่วมการอบรม"
+                  label-class="text-left"
+                >
+                  <b-form-input
+                    v-model="form.class"
+                    type="text"
+                    class="bg-white"
+                    placeholder="ชั้นเรียน"
+                    required
+                    readonly
+                  ></b-form-input>
+                </b-form-group>
+
+                <!-- Submit button -->
+                <b-button
+                  class="custom-shadow text-center w-100"
+                  style="
+                    max-width: 400px;
+                    height: 40px;
+                    border-radius: 10px;
+                    font-weight: 500 !important;
+                    font-size: 1.2rem !important;
+                  "
+                  variant="primary"
+                  @click="btnSubmit"
+                >
+                  <i class="fas fa-paper-plane"></i> ลงทะเบียน
+                </b-button>
+              </div>
+            </b-col>
+          </b-row>
+        </b-container>
+      </template>
+    </div>
+  </body>
+
+  <!-- JS Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-vue/2.23.1/bootstrap-vue.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.6/axios.min.js"></script>
+  <script src="https://unpkg.com/vue-select@3.20.2/dist/vue-select.js"></script>
+
+  <script>
+    Vue.component("v-select", VueSelect.VueSelect);
+
+    const app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          keyUpdate: 0,
+          // Page titles
+          title: "เชิญร่วมอบรม",
+          subtitle: "การอธิษฐานเพื่อรักษาโรค",
+          registerTitle: "อบรมการสร้างสาวก",
+
+          // State variables
+          register: false,
+          isCookied: false,
+          showLineQR: false,
+
+          // zoom
+          zoomWebLink:
+            "https://us02web.zoom.us/j/81915886102?pwd=FYsUwP962bHB3Ihks6sBTfV1zC3tPa.1",
+          meetingNumber: "81915886102",
+          meetingPwd: "FYsUwP962bHB3Ihks6sBTfV1zC3tPa.1",
+          deepOpenTimeoutMs: 800,
+
+          // Registration form
+          form: {
+            number_id: null,
+            first_name: null,
+            last_name: null,
+            class: "29 กันยายน 2025",
+            province: null,
+          },
+
+          // Province options (ตัดมาเหมือนเดิม)...
+          provinceOptions: [
+            "กรุงเทพมหานคร",
+            "กระบี่",
+            "กาญจนบุรี",
+            "กาฬสินธุ์",
+            "กำแพงเพชร",
+            "ขอนแก่น",
+            "จันทบุรี",
+            "ฉะเชิงเทรา",
+            "ชลบุรี",
+            "ชัยนาท",
+            "ชัยภูมิ",
+            "ชุมพร",
+            "เชียงราย",
+            "เชียงใหม่",
+            "ตรัง",
+            "ตราด",
+            "ตาก",
+            "นครนายก",
+            "นครปฐม",
+            "นครพนม",
+            "นครราชสีมา",
+            "นครศรีธรรมราช",
+            "นครสวรรค์",
+            "นนทบุรี",
+            "นราธิวาส",
+            "น่าน",
+            "บึงกาฬ",
+            "บุรีรัมย์",
+            "ปทุมธานี",
+            "ประจวบคีรีขันธ์",
+            "ปราจีนบุรี",
+            "ปัตตานี",
+            "พระนครศรีอยุธยา",
+            "พังงา",
+            "พัทลุง",
+            "พิจิตร",
+            "พิษณุโลก",
+            "เพชรบุรี",
+            "เพชรบูรณ์",
+            "แพร่",
+            "พะเยา",
+            "ภูเก็ต",
+            "มหาสารคาม",
+            "มุกดาหาร",
+            "แม่ฮ่องสอน",
+            "ยโสธร",
+            "ยะลา",
+            "ร้อยเอ็ด",
+            "ระนอง",
+            "ระยอง",
+            "ราชบุรี",
+            "ลพบุรี",
+            "ลำปาง",
+            "ลำพูน",
+            "เลย",
+            "ศรีสะเกษ",
+            "สกลนคร",
+            "สงขลา",
+            "สตูล",
+            "สมุทรปราการ",
+            "สมุทรสงคราม",
+            "สมุทรสาคร",
+            "สระแก้ว",
+            "สระบุรี",
+            "สิงห์บุรี",
+            "สุโขทัย",
+            "สุพรรณบุรี",
+            "สุราษฎร์ธานี",
+            "สุรินทร์",
+            "หนองคาย",
+            "หนองบัวลำภู",
+            "อ่างทอง",
+            "อุดรธานี",
+            "อุตรดิตถ์",
+            "อุทัยธานี",
+            "อุบลราชธานี",
+            "อำนาจเจริญ",
+          ],
+        };
+      },
+      computed: {
+        // deep link รูปแบบ zoommtg
+        zoomDeepLink() {
+          return `zoommtg://zoom.us/join?confno=${encodeURIComponent(
+            this.meetingNumber
+          )}&pwd=${encodeURIComponent(this.meetingPwd)}`;
+        },
+        // QR รูปแบบจาก API (ใช้ลิงก์เว็บเป็นค่า data)
+        zoomQrUrl() {
+          return (
+            "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" +
+            encodeURIComponent(this.zoomWebLink)
+          );
+        },
+        shortLink() {
+          try {
+            const u = new URL(this.zoomWebLink);
+            return u.origin + u.pathname;
+          } catch (e) {
+            return this.zoomWebLink;
+          }
+        },
+      },
+      methods: {
+        // Cookie helpers (store string "1")
+        setCookie(name, value, days) {
+          let expires = "";
+          if (days) {
+            const date = new Date();
+            date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+            expires = "; expires=" + date.toUTCString();
+          }
+          // SameSite=Lax เพื่อให้ทำงานข้ามหน้าได้อย่างปลอดภัยบน localhost
+          document.cookie =
+            name +
+            "=" +
+            encodeURIComponent(value || "") +
+            expires +
+            "; path=/; SameSite=Lax";
+        },
+        getCookie(name) {
+          const nameEQ = name + "=";
+          const ca = document.cookie.split(";");
+          for (let i = 0; i < ca.length; i++) {
+            let c = ca[i].trim();
+            if (c.indexOf(nameEQ) === 0)
+              return decodeURIComponent(c.substring(nameEQ.length));
+          }
+          return null;
+        },
+        eraseCookie(name) {
+          document.cookie =
+            name + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+        },
+
+        // Handle form submission
+        async btnSubmit() {
+          if (
+            !this.form.number_id ||
+            !this.form.first_name ||
+            !this.form.last_name ||
+            !this.form.class ||
+            !this.form.province
+          ) {
+            alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+            return;
+          }
+
+          try {
+            const response = await axios.post(
+              "https://my-vercel-api-neon.vercel.app/api/prayertraining/add",
+              this.form
+            );
+
+            console.log("Response:", response.data);
+
+            // ถ้าสำเร็จหรือ update ให้เซ็ต cookie และสถานะ
+            if (
+              response.data.message === "Success" ||
+              response.data.message === "Update"
+            ) {
+              const toastMsg =
+                response.data.message === "Success"
+                  ? "ระบบได้รับข้อมูลของท่านเรียบร้อยแล้ว"
+                  : "เบอร์โทรของท่านได้ลงทะเบียนไปแล้ว ข้อมูลใหม่จะถูกปรับปรุง";
+
+              this.$bvToast.toast(toastMsg, {
+                title:
+                  response.data.message === "Success"
+                    ? "ลงทะเบียนสำเร็จ"
+                    : "แจ้งเตือน",
+                variant:
+                  response.data.message === "Success" ? "primary" : "warning",
+                toaster: "b-toaster-top-center",
+                solid: true,
+              });
+
+              // set cookie เป็น string "1"
+              // this.setCookie("isRegistered", "1", 30);
+              // แปลงเป็น boolean เพื่อใช้ใน template
+              this.isCookied = this.getCookie("isRegistered") === "1";
+              this.keyUpdate++;
+
+              this.showLineQR = true;
+            } else {
+              alert("เกิดข้อผิดพลาด");
+            }
+
+            // Reset form and go back to landing page
+            this.register = false;
+            this.form = {
+              number_id: null,
+              first_name: null,
+              last_name: null,
+              province: null,
+              class: "29 กันยายน 2025",
+            };
+          } catch (error) {
+            console.error("API Error:", error);
+            alert("เกิดข้อผิดพลาดในการส่งข้อมูล");
+          }
+        },
+
+        openZoomDeep() {
+          const deep = this.zoomDeepLink;
+          const web = this.zoomWebLink;
+
+          try {
+            const ifr = document.createElement("iframe");
+            ifr.style.display = "none";
+            ifr.src = deep;
+            document.body.appendChild(ifr);
+
+            setTimeout(() => {
+              try {
+                document.body.removeChild(ifr);
+              } catch (e) {
+                /*ignore*/
+              }
+              window.open(web, "_blank", "noopener");
+            }, this.deepOpenTimeoutMs);
+          } catch (e) {
+            window.open(web, "_blank", "noopener");
+          }
+
+          if (this.$bvToast) {
+            this.$bvToast.toast(
+              "กำลังเปิด Zoom (พยายามเปิดแอป หากไม่สำเร็จจะเปิดหน้าเว็บ)",
+              {
+                title: "เปิด Zoom",
+                variant: "info",
+                toaster: "b-toaster-top-center",
+                solid: true,
+              }
+            );
+          }
+        },
+
+        // คัดลอกลิงก์เว็บ (เหมือนก่อน)
+        async copyZoom() {
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              await navigator.clipboard.writeText(this.zoomWebLink);
+            } else {
+              const ta = document.createElement("textarea");
+              ta.value = this.zoomWebLink;
+              ta.setAttribute("readonly", "");
+              ta.style.position = "absolute";
+              ta.style.left = "-9999px";
+              document.body.appendChild(ta);
+              ta.select();
+              document.execCommand("copy");
+              document.body.removeChild(ta);
+            }
+
+            if (this.$bvToast) {
+              this.$bvToast.toast("คัดลอกลิงก์ Zoom แล้ว", {
+                title: "คัดลอกแล้ว",
+                variant: "success",
+                toaster: "b-toaster-top-center",
+                solid: true,
+              });
+            }
+          } catch (err) {
+            console.error(err);
+            alert("คัดลอกลิงก์ไม่สำเร็จ");
+          }
+        },
+      },
+      created() {
+        // Set document title dynamically
+        document.title = this.title;
+
+        // อ่านค่า cookie ตอนโหลด (บน localhost cookie จะทำงาน)
+        this.isCookied = this.getCookie("isRegistered") === "1";
+      },
+      watch: {
+        // อ่านค่า cookie ตอนเปลี่ยน (บน localhost cookie จะทำงาน)
+        register(newValue) {
+          if (newValue===true) {
+            // this.setCookie("isRegistered", "1", 30);
+            // this.isCookied = this.getCookie("isRegistered");
+            // this.keyUpdate++;
+            // this.cookieValue = this.getCookie("isRegistered");
+          }
+        },
+      },  
+    });
+  </script>
 </html>

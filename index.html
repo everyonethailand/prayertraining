@@ -33,7 +33,7 @@
       html,
       body {
         /* scrollbar-gutter: stable; */
-        background: #202B5D;
+        background: #202b5d;
       }
       #vs1__combobox {
         border-radius: 5px !important;
@@ -48,7 +48,15 @@
       legend {
         font-weight: 500 !important;
         font-size: 1.2rem !important;
-        color: #311b92 !important;
+        color: #f6d365 !important;
+      }
+
+      .btn-gold {
+        background: linear-gradient(45deg, #f6d365, #b08346);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s ease;
       }
     </style>
   </head>
@@ -63,46 +71,31 @@
           :key="keyUpdate"
         >
           <!-- Wrapper to center all contents and restrict max width -->
-          <div class="mt-4 text-center w-100 mx-auto" style="max-width: 420px">
+          <div class="mt-1 text-center w-100 mx-auto" style="max-width: 420px">
             <template v-if="!isCookied">
-            <h1 style="font-weight: 500 !important; color: #E5B837">
+              <!-- <h1 style="font-weight: 500 !important; color: #E5B837">
               {{ title }}
             </h1>
-            <h4 class="mb-4" style="color: #F8F38A">{{ subtitle }}</h4>
+            <h4 class="mb-4" style="color: #F8F38A">{{ subtitle }}</h4> -->
             </template>
             <template v-else>
-            <h1 style="font-weight: 500 !important; color: #311b92">
-              ลงทะเบียนเรียบร้อย
-            </h1>
+              <h1 style="font-weight: 500 !important; color: #f6d365">
+                ลงทะเบียนเรียบร้อย
+              </h1>
             </template>
             <b-row v-if="isCookied===true" class="mb-2">
-              <b-col>
+              <b-col cols="6" style="padding-right: 4px;">
                 <div class="zoom-actions d-flex align-items-center">
                   <b-button
                     variant="primary"
-                    class="mr-2"
-                    @click="openZoomDeep"
-                    style="padding: 10px 16px; border-radius: 10px; min-width: 140px;"
-                  >
-                    <i class="fas fa-video mr-2"></i> ลิงค์เข้าห้อง ZOOM
-                  </b-button>
-
-                  <b-button
-                    v-if="false"
-                    variant="outline-secondary"
-                    class="mr-2"
-                    @click="copyZoom"
-                    style="border-radius: 10px"
-                  >
-                    <i class="fas fa-copy mr-1"></i> คัดลอกลิงก์
-                  </b-button>
-
-                  <b-button
-                    variant="outline-primary"
                     @click="$bvModal.show('zoom-qr-modal')"
-                    style="padding: 10px 16px; border-radius: 10px; min-width: 140px;"
+                    style="
+                      padding: 10px 16px;
+                      border-radius: 10px;
+                      width: 100%;
+                    "
                   >
-                    <i class="fas fa-qrcode mr-1"></i> Scan QR เข้า ZOOM
+                    <i class="fas fa-video mr-2"></i> เข้า Zoom
                   </b-button>
                 </div>
 
@@ -128,17 +121,32 @@
                       >
                     </p>
                   </div>
-                  <div class="text-muted">
-                    คำแนะนำสำหรับ IOS: <br/>
-                    Meeting ID: 819 1588 6102 <br/>
-                    Passcode: 205390 <br/>
-                  </div>
+                  <b-row>
+                    <b-col col="6">
+                      <b-button
+                        variant="primary"
+                        class="mr-2"
+                        @click="openZoomDeep"
+                        style="
+                          padding: 10px 16px;
+                          border-radius: 10px;
+                          min-width: 140px;
+                        "
+                      >
+                        <i class="fas fa-video mr-2"></i> ลิงค์เข้าห้อง Zoom
+                      </b-button>
+                    </b-col>
+                    <b-col cols="6">
+                      <div class="text-muted">
+                        คำแนะนำสำหรับ IOS: <br />
+                        Meeting ID: 819 1588 6102 <br />
+                        Passcode: 205390 <br />
+                      </div>
+                    </b-col>
+                  </b-row>
                 </b-modal>
               </b-col>
-            </b-row>
-
-            <b-row v-if="isCookied===true">
-              <b-col cols="12" class="mb-2">
+              <b-col cols="6" style="padding-left: 4px;">
                 <a
                   class="mb-4"
                   href="https://line.me/ti/p/%40everyoneth"
@@ -152,13 +160,20 @@
                       background: #00c300;
                       color: white;
                       border: none;
+                      width: 100%;
                     "
                   >
-                    <i class="fab fa-line"></i> กรุณาเพิ่ม @everyoneth
+                    <i class="fab fa-line"></i> เพิ่ม @everyoneth
                   </button>
                 </a>
               </b-col>
             </b-row>
+
+            <!-- <b-row v-if="isCookied===true">
+              <b-col cols="12" class="mb-2">
+                
+              </b-col>
+            </b-row> -->
             <!-- Responsive image with shadow -->
             <b-row>
               <b-col cols="12" class="mb-2">
@@ -174,8 +189,7 @@
                 <!-- Register button (responsive & max 400px) -->
                 <b-button
                   v-if="!isCookied"
-                  variant="info"
-                  class="custom-shadow w-100"
+                  class="btn-gold custom-shadow w-100"
                   @click="register = true"
                   style="
                     max-width: 400px;
@@ -210,7 +224,7 @@
               <h3
                 style="
                   font-weight: 500 !important;
-                  color: #311b92;
+                  color: #f6d365;
                   position: relative;
                   bottom: -5px;
                 "
@@ -289,7 +303,7 @@
 
                 <!-- Submit button -->
                 <b-button
-                  class="custom-shadow text-center w-100"
+                  class="btn-gold custom-shadow text-center w-100"
                   style="
                     max-width: 400px;
                     height: 40px;
@@ -297,7 +311,6 @@
                     font-weight: 500 !important;
                     font-size: 1.2rem !important;
                   "
-                  variant="primary"
                   @click="btnSubmit"
                 >
                   <i class="fas fa-paper-plane"></i> ลงทะเบียน
@@ -327,7 +340,7 @@
           // Page titles
           title: "เชิญร่วมอบรม",
           subtitle: "การอธิษฐานเพื่อรักษาโรค",
-          registerTitle: "อบรมการสร้างสาวก",
+          registerTitle: "การอธิษฐานเพื่อรักษาโรค พร้อมรับการถ่ายทอดของประทาน",
 
           // State variables
           register: false,
@@ -530,7 +543,7 @@
               });
 
               // set cookie เป็น string "1"
-              // this.setCookie("isRegistered", "1", 30);
+              this.setCookie("isRegistered", "1", 30);
               // แปลงเป็น boolean เพื่อใช้ใน template
               this.isCookied = this.getCookie("isRegistered") === "1";
               this.keyUpdate++;
@@ -631,14 +644,14 @@
       watch: {
         // อ่านค่า cookie ตอนเปลี่ยน (บน localhost cookie จะทำงาน)
         register(newValue) {
-          if (newValue===true) {
+          if (newValue === true) {
             // this.setCookie("isRegistered", "1", 30);
             // this.isCookied = this.getCookie("isRegistered");
             // this.keyUpdate++;
             // this.cookieValue = this.getCookie("isRegistered");
           }
         },
-      },  
+      },
     });
   </script>
 </html>

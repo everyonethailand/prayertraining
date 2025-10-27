@@ -207,11 +207,15 @@
                   style="font-size: 0.9rem; line-height: 1.4rem"
                 >
                   หมายเหตุ: หากท่านเคยลงทะเบียนแล้ว ระบบจะจดจำเบอร์โทรศัพท์
-                  ท่านไม่ต้องลงทะเบียนซ้ำ <span @click="btnResetCookie" style="color: #ccc; font-style: italic; cursor: pointer;">คลิกที่นี้เพื่อลงทะเบียนใหม่</span>
+                  ท่านไม่ต้องลงทะเบียนซ้ำ
+                  <span
+                    @click="btnResetCookie"
+                    style="color: #ccc; font-style: italic; cursor: pointer"
+                    >คลิกที่นี้เพื่อลงทะเบียนใหม่</span
+                  >
                 </div>
-              </b-col>  
+              </b-col>
             </b-row>
-
           </div>
         </b-container>
       </template>
@@ -248,16 +252,22 @@
             <b-col cols="12" class="text-center mb-4" style="padding: 0px">
               <div class="register-form">
                 <!-- Phone number -->
-                <b-form-group label="เบอร์โทรศัพท์" label-class="text-left">
+                <b-form-group
+                  label="เบอร์โทรศัพท์ หรือ อีเมล"
+                  label-class="text-left"
+                >
                   <b-form-input
                     v-model="form.number_id"
                     type="text"
-                    maxlength="10"
-                    @input="form.number_id = form.number_id.replace(/\D/g, '').slice(0, 10)"
-                    placeholder="เบอร์โทรศัพท์ (เช่น 0812345678)"
-                    autofocus
+                    placeholder="กรอกเบอร์โทรศัพท์ หรือ อีเมล"
+                    @input="onInput"
+                    :state="isValidNumberOrEmail"
                     required
                   ></b-form-input>
+
+                  <b-form-invalid-feedback>
+                    กรุณากรอกเบอร์โทรศัพท์ (10 หลัก) หรือ อีเมล ที่ถูกต้อง
+                  </b-form-invalid-feedback>
                 </b-form-group>
 
                 <!-- Province select -->
@@ -365,7 +375,7 @@
 
           // Registration form
           form: {
-            number_id: null,
+            number_id: "",
             first_name: null,
             last_name: null,
             class: "27-31 ตุลาคม 2025",
@@ -476,8 +486,29 @@
             return this.zoomWebLink;
           }
         },
+
+        isValidNumberOrEmail() {
+          const value = this.form.number_id.trim();
+          if (!value) return null; // ยังไม่กรอก
+
+          // ตรวจสอบเบอร์โทรศัพท์ (เฉพาะตัวเลข 10 หลัก)
+          const phoneRegex = /^0[0-9]{9}$/;
+
+          // ตรวจสอบอีเมล
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+          return phoneRegex.test(value) || emailRegex.test(value);
+        },
       },
       methods: {
+        onInput() {
+          const v = this.form.number_id;
+          // ถ้าขึ้นต้นด้วยตัวเลข ให้ล้างอักขระที่ไม่ใช่ตัวเลข
+          if (/^[0-9]/.test(v)) {
+            this.form.number_id = v.replace(/\D/g, "").slice(0, 10);
+          }
+          // ถ้าเริ่มด้วยตัวอักษรหรือมี '@' แล้ว → ถือว่าเป็นอีเมล → ไม่แตะต้อง
+        },
         // Cookie helpers (store string "1")
         btnResetCookie() {
           this.eraseCookie("isRegistered");
@@ -570,7 +601,7 @@
             // Reset form and go back to landing page
             this.register = false;
             this.form = {
-              number_id: null,
+              number_id: "",
               first_name: null,
               last_name: null,
               province: null,
